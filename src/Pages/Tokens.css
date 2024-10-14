@@ -1,0 +1,47 @@
+.tabs-module_tabs-root__Fz-je {
+    --dg-tabs-nav-border-width: 2px;
+    --dg-tabs-tab-text-font-size: 16px;
+    --dg-tabs-tab-text-line-height: 20px;
+    --dg-tabs-tab-text-font-weight: 500;
+    --dg-tabs-tab-gutter: 8px;
+    --dg-underline-tabs-tab-padding: 12px 16px;
+    --dg-pill-tabs-tab-padding: 6px 16px;
+    --dg-tabs-underline-height: 0.5px;
+    --dg-tabs-width: 5px;
+    --dg-tabs-ink-bar-height: 2px;
+    --dg-tabs-ink-bar-border-radius: 2px 2px 0px 0px;
+    --dg-tabs-ink-bar-width: 3px;
+    --dg-tabs-default-intent-tabs-nav-border-color: var(--dg-tc-border);
+    --dg-tabs-default-intent-tabs-ink-bar-bg-color: var(--dg-tc-itr-primary);
+    --dg-tabs-default-intent-tabs-tab-unactive-text-color: var(--dg-tc-text-dim);
+    --dg-tabs-default-intent-underline-tabs-tab-active-text-color: var(--dg-tc-text);
+    --dg-tabs-default-intent-pill-tabs-tab-active-text-color: var(--dg-tc-text);
+    --dg-tabs-default-intent-pill-tabs-tab-active-bg-color: var(--dg-tc-itr-secondary);
+    --dg-tabs-default-intent-pill-tabs-tab-hover-bg-color: var(--dg-tc-itr-secondary-hovered);
+    --dg-tabs-default-intent-pill-tabs-tab-hover-color: var(--dg-tc-text);
+    --dg-tabs-default-intent-underline-tabs-tab-hover-color: var(--dg-tc-text);
+    --dg-tabs-disabled-intent-tabs-tab-text-color: var(--dg-tc-text-disabled);
+    --dg-tabs-pill-nav-border: 1px solid var(--dg-tc-border);
+    --dg-tabs-pill-nav-border-radius: 8px;
+    --dg-tabs-pill-nav-padding: 6px;
+    --dg-border-radius: 8px;
+    --dg-tabs-content-animated-transition: margin var(--dg-timing-long) var(--dg-timing-fn);
+    --dg-tabs-nav-list-transition: transform var(--dg-timing-long) var(--dg-timing-fn);
+    --dg-tabs-ink-bar-animated-transition: all var(--dg-timing-long) var(--dg-timing-fn);
+    --dg-tabs-tab-transition: background-color var(--dg-timing-long) var(--dg-timing-fn), color var(--dg-timing-long) var(--dg-timing-fn);
+}
+
+.ronin-table-thead {
+    text-transform: uppercase;
+    height: 40px;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+    border: 0 solid;
+    border-color: inherit;
+}
