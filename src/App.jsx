@@ -17,10 +17,11 @@ import useStore from "./store/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "./wagmi/wagmi-config";
+import MobileSidebar from "./components/MobileSidebar";
 
 const queryClient = new QueryClient();
 function App() {
-  const { isModalOpen } = useStore();
+  const { isModalOpen, isMobileSidebarOpen } = useStore();
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -44,6 +45,7 @@ function App() {
             </div>
           </div>
           {isModalOpen && <Modal />}
+          {isMobileSidebarOpen && <MobileSidebar />}
         </div>
       </QueryClientProvider>
     </WagmiProvider>

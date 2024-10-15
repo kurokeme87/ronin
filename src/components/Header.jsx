@@ -1,11 +1,12 @@
 import React from "react";
 import useStore from "../store/store";
 const Header = () => {
-  const { setIsModalOpen } = useStore();
+  const { setIsModalOpen, setIsMobileSidebarOpen } = useStore();
   return (
     <header className="sticky top-0 z-sticky flex h-[64px] items-center justify-between bg-tc-bg md:h-[80px]">
       <div className="flex items-center gap-24 2xl:hidden">
         <svg
+          onClick={() => setIsMobileSidebarOpen(true)}
           className="cursor-pointer text-tc-icon"
           viewBox="0 0 20 20"
           width="24"
