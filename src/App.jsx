@@ -13,29 +13,40 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Bridge from "./Pages/Bridge";
 import Modal from "./components/Modal";
-function App() {
-  return (
-    <div className>
-      <div className="flex  ">
-        <Sidebar />
-        <div className="h-full w-full  items-center justify-center flex flex-1 overflow-x-hidden overflow-y-scroll px-[16px] md:px-[54px]">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/liquidity" element={<Liquidity />} />
-            <Route path="/tokens" element={<Tokens />} />
-            <Route path="/swap" element={<Swap />} />
-            <Route path="/accounts" element={<Accounts />} />
-            <Route path="/verified-contracts" element={<Contracts />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/bridge" element={<Bridge />} />
+import useStore from "./store/store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
+import { config } from "./wagmi/wagmi-config";
 
-            <Route path="/staking" element={<Staking />} />
-            <Route path="/governance" element={<Governance />} />
-          </Routes>
-          {/* <Modal /> */}
+const queryClient = new QueryClient();
+function App() {
+  const { isModalOpen } = useStore();
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <div className>
+          <div className="flex  ">
+            <Sidebar />
+            <div className="h-full w-full  items-center justify-center flex flex-1 overflow-x-hidden overflow-y-scroll px-[16px] md:px-[54px]">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/liquidity" element={<Liquidity />} />
+                <Route path="/tokens" element={<Tokens />} />
+                <Route path="/swap" element={<Swap />} />
+                <Route path="/accounts" element={<Accounts />} />
+                <Route path="/verified-contracts" element={<Contracts />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/bridge" element={<Bridge />} />
+
+                <Route path="/staking" element={<Staking />} />
+                <Route path="/governance" element={<Governance />} />
+              </Routes>
+            </div>
+          </div>
+          {isModalOpen && <Modal />}
         </div>
-      </div>
-    </div>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
