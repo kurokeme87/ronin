@@ -34848,6 +34848,10 @@ input:focus {
   overflow: hidden;
 }
 
+.ronin-table-row {
+  height: 56px;
+}
+
 *,
 :after,
 :before {

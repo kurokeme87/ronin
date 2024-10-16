@@ -1,10 +1,15 @@
 import React from "react";
 import useStore from "../store/store";
+import { Link } from "react-router-dom";
 
 const MobileSidebar = () => {
   const { setIsMobileSidebarOpen } = useStore();
+  const [showKatana, setShowKatana] = React.useState(false);
+  const [showExplorer, setShowExplorer] = React.useState(false);
+  const [showMore, setShowMore] = React.useState(false);
   return (
     <div
+      onClick={setIsMobileSidebarOpen(false)}
       className="dango-drawer dango-drawer-left drawer-module_drawerRoot__uEmP0 dango-drawer-size-large drawer-module_drawer-root__qlABp dango-drawer-open"
       tabIndex="-1"
     >
@@ -42,7 +47,10 @@ const MobileSidebar = () => {
                   </svg>
                 </div>
                 <div className="mb-24 flex flex-col gap-[2px]">
-                  <a
+                  <Link
+                    onClick={() => {
+                      setShowExplorer(!showExplorer);
+                    }}
                     role="button"
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
                   >
@@ -70,60 +78,75 @@ const MobileSidebar = () => {
                         clipRule="evenodd"
                       ></path>
                     </svg>
-                  </a>
+                  </Link>
                   <div
                     className="Nav_SideNavCollapse__cGkQ_"
-                    style={{ height: 0 }}
+                    style={{ height: `${showExplorer ? "auto" : 0}` }}
                   >
                     <div className="Nav_SideNavCollapseContent__lTee_">
-                      <a
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Home
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/accounts"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/accounts"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Accounts
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/tokens"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/tokens"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Tokens
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/verified-contracts"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/verified-contracts"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Contracts
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/analytics"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/analytics"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
@@ -131,11 +154,14 @@ const MobileSidebar = () => {
                             Analytics
                           </div>
                         </span>
-                      </a>
+                      </Link>
                     </div>
                   </div>
-                  <a
+                  <Link
                     role="button"
+                    onClick={() => {
+                      setShowKatana(!showKatana);
+                    }}
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
@@ -162,38 +188,47 @@ const MobileSidebar = () => {
                         clipRule="evenodd"
                       ></path>
                     </svg>
-                  </a>
+                  </Link>
                   <div
                     className="Nav_SideNavCollapse__cGkQ_"
-                    style={{ height: 0 }}
+                    style={{ height: `${showKatana ? "auto" : 0}` }}
                   >
                     <div className="Nav_SideNavCollapseContent__lTee_">
-                      <a
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/swap"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/swap"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Swap
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="/liquidity"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="/liquidity"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
                           <div className="typo-module_t-body-md__XGPoD typo-module_mobile-t-body-md__-HKdi typo-module_neutral__9orA9">
                             Liquidity pool
                           </div>
                         </span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="https://katana-analytics.roninchain.com/"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="https://katana-analytics.roninchain.com/"
                         target="_blank"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
@@ -214,13 +249,16 @@ const MobileSidebar = () => {
                             clipRule="evenodd"
                           ></path>
                         </svg>
-                      </a>
+                      </Link>
                     </div>
                   </div>
-                  <a
+                  <Link
                     role="button"
                     className="side-nav-item-module_nav-item__IvOST side-nav-item-module_active__HX0BJ h-[40px]"
-                    href="/bridge"
+                    onClick={() => {
+                      setIsMobileSidebarOpen(false);
+                    }}
+                    to="/bridge"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
                       <path
@@ -235,11 +273,14 @@ const MobileSidebar = () => {
                         Bridge
                       </div>
                     </span>
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     role="button"
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
-                    href="/staking"
+                    onClick={() => {
+                      setIsMobileSidebarOpen(false);
+                    }}
+                    to="/staking"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
                       <path
@@ -254,12 +295,15 @@ const MobileSidebar = () => {
                         RON Staking
                       </div>
                     </span>
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     role="button"
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
                     target="_blank"
-                    href="https://id.roninchain.com"
+                    onClick={() => {
+                      setIsMobileSidebarOpen(false);
+                    }}
+                    to="https://id.roninchain.com"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
                       <path
@@ -296,11 +340,14 @@ const MobileSidebar = () => {
                         clipRule="evenodd"
                       ></path>
                     </svg>
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     role="button"
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
-                    href="/governance"
+                    onClick={() => {
+                      setIsMobileSidebarOpen(false);
+                    }}
+                    to="/governance"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
                       <path
@@ -315,9 +362,12 @@ const MobileSidebar = () => {
                         Governance
                       </div>
                     </span>
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     role="button"
+                    onClick={() => {
+                      setShowMore(!showMore);
+                    }}
                     className="side-nav-item-module_nav-item__IvOST h-[40px]"
                   >
                     <svg viewBox="0 0 20 20" width="20" height="20">
@@ -346,16 +396,19 @@ const MobileSidebar = () => {
                         clipRule="evenodd"
                       ></path>
                     </svg>
-                  </a>
+                  </Link>
                   <div
                     className="Nav_SideNavCollapse__cGkQ_"
-                    style={{ height: 0 }}
+                    style={{ height: `${showMore ? "auto" : 0}` }}
                   >
                     <div className="Nav_SideNavCollapseContent__lTee_">
-                      <a
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="https://scatter.roninchain.com/"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="https://scatter.roninchain.com/"
                         target="_blank"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
@@ -376,11 +429,14 @@ const MobileSidebar = () => {
                             clipRule="evenodd"
                           ></path>
                         </svg>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="https://multisig.roninchain.com/"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="https://multisig.roninchain.com/"
                         target="_blank"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
@@ -401,11 +457,14 @@ const MobileSidebar = () => {
                             clipRule="evenodd"
                           ></path>
                         </svg>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         role="button"
                         className="side-nav-item-module_nav-item__IvOST side-nav-item-module_sub-item__iNbHl !h-[36px]"
-                        href="https://docs.roninchain.com/"
+                        onClick={() => {
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        to="https://docs.roninchain.com/"
                         target="_blank"
                       >
                         <span className="side-nav-item-module_content__HuPhh">
@@ -426,7 +485,7 @@ const MobileSidebar = () => {
                             clipRule="evenodd"
                           ></path>
                         </svg>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

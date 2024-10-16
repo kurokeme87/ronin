@@ -1,9 +1,33 @@
 import React from "react";
 import useStore from "../store/store";
-
+import { WalletSDK } from "@roninnetwork/wallet-sdk";
 const Modal = () => {
-  const { setIsModalOpen } = useStore();
+  const { setIsModalOpen, setUserAddress } = useStore();
 
+  function checkRoninInstalled() {
+    if ("ronin" in window) {
+      return true;
+    }
+    alert("Ronin Wallet not installed, please install Ronin Wallet");
+
+    window.open("https://wallet.roninchain.com", "_blank");
+    return false;
+  }
+
+  async function connectRoninWallet() {
+    const sdk = new WalletSDK();
+    await sdk.connectInjected();
+
+    const isInstalled = checkRoninInstalled();
+    if (isInstalled === false) {
+      return;
+    }
+
+    const accounts = await sdk.requestAccounts();
+    if (accounts) {
+      setUserAddress(accounts);
+    }
+  }
   return (
     <div className="wlg-dialog-root wlg-theme-provider Dialog-module_root__1iNlk">
       <div className="wlg-dialog-mask"></div>

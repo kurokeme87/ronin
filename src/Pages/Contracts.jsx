@@ -21,7 +21,7 @@ const Contracts = () => {
                   className="ronin-table-content"
                   style={{ overflow: "auto hidden" }}
                 >
-                  <a
+                  {/* <a
                     className="ronin-table-row ronin-table-row-level-0 table-row cursor-pointer"
                     data-row-key="0"
                     href="/address/0x1db83f3cb28780b2394e8313ffe5a8d6803fdefd"
@@ -170,7 +170,7 @@ const Contracts = () => {
                     data-row-key="24"
                     href="/address/0xd4f8996437e367c202e7b63fc3856c0e8a2b9cfc"
                     style={{ verticalAlign: "inherit" }}
-                  ></a>
+                  ></a> */}
                   <table
                     style={{
                       width: "auto",
@@ -180,7 +180,7 @@ const Contracts = () => {
                   >
                     <colgroup></colgroup>
                     <thead className="ronin-table-thead">
-                      <tr>
+                      <tr className='ronin-table-row'>
                         <th
                           className="ronin-table-cell"
                           scope="col"
@@ -282,7 +282,7 @@ const Contracts = () => {
                           </div>
                         </td>
                       </tr>
-                      <tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -375,6 +375,8 @@ const Contracts = () => {
                             2 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -467,6 +469,8 @@ const Contracts = () => {
                             7 mins ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -559,6 +563,8 @@ const Contracts = () => {
                             2 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -651,6 +657,9 @@ const Contracts = () => {
                             9 secs ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -742,6 +751,10 @@ const Contracts = () => {
                             7 mins ago
                           </div>
                         </td>
+                      </tr>
+
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -834,6 +847,8 @@ const Contracts = () => {
                             4 mins ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -926,6 +941,8 @@ const Contracts = () => {
                             2 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1018,6 +1035,9 @@ const Contracts = () => {
                             6 secs ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1110,6 +1130,9 @@ const Contracts = () => {
                             2 days ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1202,6 +1225,9 @@ const Contracts = () => {
                             19 secs ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1294,6 +1320,9 @@ const Contracts = () => {
                             2 secs ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1386,6 +1415,9 @@ const Contracts = () => {
                             2 days ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1478,6 +1510,9 @@ const Contracts = () => {
                             3 days ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1570,6 +1605,10 @@ const Contracts = () => {
                             3 days ago
                           </div>
                         </td>
+
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1662,6 +1701,9 @@ const Contracts = () => {
                             18 secs ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1754,6 +1796,8 @@ const Contracts = () => {
                             5 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1846,6 +1890,8 @@ const Contracts = () => {
                             5 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -1938,6 +1984,9 @@ const Contracts = () => {
                             5 mins ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2030,6 +2079,9 @@ const Contracts = () => {
                             5 mins ago
                           </div>
                         </td>
+
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2121,6 +2173,9 @@ const Contracts = () => {
                             5 mins ago
                           </div>
                         </td>
+                      </tr>
+
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2213,6 +2268,8 @@ const Contracts = () => {
                             5 mins ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2305,6 +2362,8 @@ const Contracts = () => {
                             6 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2397,6 +2456,8 @@ const Contracts = () => {
                             10 days ago
                           </div>
                         </td>
+                      </tr>
+                      <tr className='ronin-table-row'>
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2489,6 +2550,10 @@ const Contracts = () => {
                             10 days ago
                           </div>
                         </td>
+
+                      </tr>
+                      <tr className='ronin-table-row'>
+
                         <td
                           className="ronin-table-cell"
                           style={{ textAlign: "left" }}
@@ -2581,6 +2646,7 @@ const Contracts = () => {
                             10 days ago
                           </div>
                         </td>
+
                       </tr>
                     </tbody>
                   </table>

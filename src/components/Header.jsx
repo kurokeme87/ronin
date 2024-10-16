@@ -1,12 +1,15 @@
 import React from "react";
 import useStore from "../store/store";
+import HeaderConnected from "./HeaderConnected";
+import { Link } from "react-router-dom";
 const Header = () => {
-  const { setIsModalOpen, setIsMobileSidebarOpen } = useStore();
+  const { setIsModalOpen, setIsMobileSidebarOpen, userAddress, isMobileSidebarOpen } = useStore();
+  console.log(isMobileSidebarOpen)
   return (
     <header className="sticky top-0 z-sticky flex h-[64px] items-center justify-between bg-tc-bg md:h-[80px]">
       <div className="flex items-center gap-24 2xl:hidden">
         <svg
-          onClick={() => setIsMobileSidebarOpen(true)}
+          onClick={() => { setIsMobileSidebarOpen(true); console.log('clicked', isMobileSidebarOpen) }}
           className="cursor-pointer text-tc-icon"
           viewBox="0 0 20 20"
           width="24"
@@ -19,9 +22,9 @@ const Header = () => {
             clipRule="evenodd"
           ></path>
         </svg>
-        <a
+        <Link
           className="typo-module_t-body-md-strong__B-Sd1 typo-module_mobile-t-body-md-strong__Kd9tc typo-module_neutral__9orA9 link-module_link__Nwimt link-module_underline-mode-onlyWhenHover__alkql undefined"
-          href="/"
+          to="/"
         >
           <svg
             width="99"
@@ -45,95 +48,101 @@ const Header = () => {
               className="style_content__v85Qk"
             ></path>
           </svg>
-        </a>
+        </Link>
       </div>
-      <div className="flex items-center gap-24 2xl:hidden">
-        <div>
+      {userAddress.length > 0 ? (
+        <HeaderConnected />
+      ) : (
+        <div className="flex items-center gap-24 2xl:hidden">
+          <div>
+            <svg
+              className="cursor-pointer text-tc-icon md:hidden"
+              viewBox="0 0 20 20"
+              width="24"
+              height="24"
+            >
+              <path
+                fill="currentColor"
+                d="M13.742 12.328a6.524 6.524 0 1 0-1.414 1.414l3.965 3.965a1 1 0 0 0 1.414-1.414l-3.965-3.965ZM4 8.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"
+              ></path>
+            </svg>
+
+            <div className="hidden bg-white w-[320px] md:block">
+              <div className="form-item-module_form__3-Rfq text-field-module_input-root__PSsoe">
+                <div className="input-module_container__Gch8D input-module_default__Rk4yp max-w-full md:w-[320px]">
+                  <div className="input-module_form__2zFJF">
+                    <span className="input-module_prefix__uR1Sx">
+                      <svg viewBox="0 0 20 20" width="20" height="20">
+                        <path
+                          fill="currentColor"
+                          d="M13.742 12.328a6.524 6.524 0 1 0-1.414 1.414l3.965 3.965a1 1 0 0 0 1.414-1.414l-3.965-3.965ZM4 8.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <input
+                      tabIndex="1"
+                      placeholder="Address, Tx Hash, Block, etc."
+                      id="1"
+                      className="input-module_formControl__oYbNL input-module_hasPrefix__Zh5xG input-module_hasSuffix__hiMdC"
+                      value=""
+                    />
+                    <span className="input-module_suffix__nC3z-">
+                      <div className="inline-flex items-center gap-4">
+                        <svg
+                          className="hidden cursor-pointer md:hidden"
+                          viewBox="0 0 20 20"
+                          width="20"
+                          height="20"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M10 4c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6Zm2.386 7.326a.375.375 0 0 1 0 .53l-.53.53a.375.375 0 0 1-.53 0L10 11.062l-1.326 1.325a.375.375 0 0 1-.53 0l-.53-.53a.375.375 0 0 1 0-.53L8.94 10 7.614 8.674a.375.375 0 0 1 0-.53l.53-.53a.375.375 0 0 1 .53 0L10 8.94l1.326-1.326a.375.375 0 0 1 .53 0l.53.53a.375.375 0 0 1 0 .53L11.062 10l1.325 1.326Z"
+                          ></path>
+                        </svg>
+                        <svg viewBox="0 0 20 20" width="20" height="20">
+                          <g clipPath="url(#slash_svg__a)">
+                            <path
+                              fill="var(--dg-tc-sf-dim)"
+                              d="M0 4a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4Z"
+                            ></path>
+                            <path
+                              fill="var(--dg-tc-icon)"
+                              d="M11.65 4.176h-.978L8 15.109h.979L11.65 4.176Z"
+                            ></path>
+                          </g>
+                          <defs>
+                            <clipPath id="slash_svg__a">
+                              <path fill="#fff" d="M0 0h20v20H0z"></path>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <svg
-            className="cursor-pointer text-tc-icon md:hidden"
+            onClick={() => setIsModalOpen(true)}
+            className="cursor-pointer text-tc-icon"
             viewBox="0 0 20 20"
             width="24"
             height="24"
           >
             <path
               fill="currentColor"
-              d="M13.742 12.328a6.524 6.524 0 1 0-1.414 1.414l3.965 3.965a1 1 0 0 0 1.414-1.414l-3.965-3.965ZM4 8.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"
+              d="M13 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z"
+            ></path>
+            <path
+              fill="currentColor"
+              fillRule="evenodd"
+              d="M12.5 3A1.5 1.5 0 0 1 14 4.5H5.5V5H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.182A2.182 2.182 0 0 1 2 14.818V4.5c0 .16.026.276.074.36A.942.942 0 0 1 2 4.5C2 3.671 3.171 3 4 3h8.5ZM14 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+              clipRule="evenodd"
             ></path>
           </svg>
-          <div className="hidden w-[320px] md:block">
-            <div className="form-item-module_form__3-Rfq text-field-module_input-root__PSsoe">
-              <div className="input-module_container__Gch8D input-module_default__Rk4yp max-w-full md:w-[320px]">
-                <div className="input-module_form__2zFJF">
-                  <span className="input-module_prefix__uR1Sx">
-                    <svg viewBox="0 0 20 20" width="20" height="20">
-                      <path
-                        fill="currentColor"
-                        d="M13.742 12.328a6.524 6.524 0 1 0-1.414 1.414l3.965 3.965a1 1 0 0 0 1.414-1.414l-3.965-3.965ZM4 8.5a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"
-                      ></path>
-                    </svg>
-                  </span>
-                  <input
-                    tabIndex="1"
-                    placeholder="Address, Tx Hash, Block, etc."
-                    id="1"
-                    className="input-module_formControl__oYbNL input-module_hasPrefix__Zh5xG input-module_hasSuffix__hiMdC"
-                    value=""
-                  />
-                  <span className="input-module_suffix__nC3z-">
-                    <div className="inline-flex items-center gap-4">
-                      <svg
-                        className="hidden cursor-pointer md:hidden"
-                        viewBox="0 0 20 20"
-                        width="20"
-                        height="20"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M10 4c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6Zm2.386 7.326a.375.375 0 0 1 0 .53l-.53.53a.375.375 0 0 1-.53 0L10 11.062l-1.326 1.325a.375.375 0 0 1-.53 0l-.53-.53a.375.375 0 0 1 0-.53L8.94 10 7.614 8.674a.375.375 0 0 1 0-.53l.53-.53a.375.375 0 0 1 .53 0L10 8.94l1.326-1.326a.375.375 0 0 1 .53 0l.53.53a.375.375 0 0 1 0 .53L11.062 10l1.325 1.326Z"
-                        ></path>
-                      </svg>
-                      <svg viewBox="0 0 20 20" width="20" height="20">
-                        <g clipPath="url(#slash_svg__a)">
-                          <path
-                            fill="var(--dg-tc-sf-dim)"
-                            d="M0 4a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4Z"
-                          ></path>
-                          <path
-                            fill="var(--dg-tc-icon)"
-                            d="M11.65 4.176h-.978L8 15.109h.979L11.65 4.176Z"
-                          ></path>
-                        </g>
-                        <defs>
-                          <clipPath id="slash_svg__a">
-                            <path fill="#fff" d="M0 0h20v20H0z"></path>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </div>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <svg
-          className="cursor-pointer text-tc-icon"
-          viewBox="0 0 20 20"
-          width="24"
-          height="24"
-        >
-          <path
-            fill="currentColor"
-            d="M13 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z"
-          ></path>
-          <path
-            fill="currentColor"
-            fillRule="evenodd"
-            d="M12.5 3A1.5 1.5 0 0 1 14 4.5H5.5V5H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.182A2.182 2.182 0 0 1 2 14.818V4.5c0 .16.026.276.074.36A.942.942 0 0 1 2 4.5C2 3.671 3.171 3 4 3h8.5ZM14 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-            clipRule="evenodd"
-          ></path>
-        </svg>
-      </div>
+      )}
       <div className="hidden 2xl:flex">
         <div className="w-[320px]">
           <div className="form-item-module_form__3-Rfq text-field-module_input-root__PSsoe">

@@ -1,32 +1,5 @@
-import React, { useState } from "react";
-import { WalletSDK } from "@roninnetwork/wallet-sdk";
 import Header from "../components/Header";
 const Home = () => {
-  const [userAddress, setUserAddress] = useState();
-
-  function checkRoninInstalled() {
-    if ("ronin" in window) {
-      return true;
-    }
-
-    window.open("https://wallet.roninchain.com", "_blank");
-    return false;
-  }
-
-  async function connectRoninWallet(props) {
-    const sdk = new WalletSDK();
-    await sdk.connectInjected();
-
-    const isInstalled = checkRoninInstalled();
-    if (isInstalled === false) {
-      return;
-    }
-
-    const accounts = await sdk.requestAccounts();
-    if (accounts) {
-      setUserAddress(accounts);
-    }
-  }
   return (
     <div className=" flex-1 overflow-x-hidden overflow-y-scroll px-[16px] md:px-[54px]">
       <div className="mx-auto max-w-[1180px]">

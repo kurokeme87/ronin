@@ -45,7 +45,7 @@ function App() {
             </div>
           </div>
           {isModalOpen && <Modal />}
-          {isMobileSidebarOpen && <MobileSidebar />}
+          {<MobileSidebar />}
         </div>
       </QueryClientProvider>
     </WagmiProvider>

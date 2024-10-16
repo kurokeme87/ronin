@@ -140,7 +140,7 @@ const Tokens = () => {
                     className="ronin-table-content"
                     style={{ overflow: "auto hidden" }}
                   >
-                    <a
+                    {/* <a
                       className="ronin-table-row ronin-table-row-level-0 table-row cursor-pointer"
                       href="/token/0xa8754b9fa15fc18bb59458815510e40a12cd2014"
                       style={{ verticalAlign: "inherit" }}
@@ -264,7 +264,7 @@ const Tokens = () => {
                       className="ronin-table-row ronin-table-row-level-0 table-row cursor-pointer"
                       href="/token/0xa96660f0e4a3e9bc7388925d245a6d4d79e21259"
                       style={{ verticalAlign: "inherit" }}
-                    ></a>
+                    ></a> */}
                     <table
                       style={{
                         width: "auto",
@@ -274,7 +274,7 @@ const Tokens = () => {
                     >
                       <colgroup></colgroup>
                       <thead className="ronin-table-thead">
-                        <tr>
+                        <tr className="ronin-table-row">
                           <th
                             className="ronin-table-cell"
                             scope="col"
@@ -382,7 +382,7 @@ const Tokens = () => {
                             </div>
                           </td>
                         </tr>
-                        <tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -457,6 +457,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -531,6 +533,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -616,6 +620,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
+                          {" "}
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -690,6 +697,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
+                          {" "}
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -764,6 +774,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -836,6 +849,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -910,6 +926,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -984,6 +1003,10 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
+
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1058,6 +1081,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1132,6 +1158,10 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1206,6 +1236,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1280,6 +1312,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1365,6 +1400,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1439,6 +1476,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1513,6 +1553,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1598,6 +1640,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1672,6 +1716,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1746,6 +1792,8 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1820,6 +1868,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1894,6 +1945,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+
+                        </tr>
+                        <tr className="ronin-table-row">
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -1968,6 +2022,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
+
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -2042,6 +2099,9 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+                        <tr className="ronin-table-row">
+
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -2116,6 +2176,10 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
+
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -2190,6 +2254,10 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+                        </tr>
+
+                        <tr className="ronin-table-row">
+
                           <td
                             className="ronin-table-cell"
                             style={{ textAlign: "left" }}
@@ -2264,6 +2332,7 @@ const Tokens = () => {
                               1 hour ago
                             </div>
                           </td>
+
                         </tr>
                       </tbody>
                     </table>
@@ -2372,7 +2441,7 @@ const Tokens = () => {
               </div>
             </div>
             <thead className="ronin-table-thead">
-              <tr>
+              <tr className="ronin-table-row">
                 <th
                   className="ronin-table-cell"
                   scope="col"
