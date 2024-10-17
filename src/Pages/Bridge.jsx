@@ -1,9 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BridgeModal from "../components/BridgeModal";
 import Header from "../components/Header";
-
+import { UseWallet } from "../services/useWallet";
+import { useAccount } from "wagmi";
+import { utils } from 'ethers'
+import { WalletSDK } from "@roninnetwork/wallet-sdk";
+import RoninBridgeModal from "../components/RoninBridgeModal";
 const Bridge = () => {
+  const { bridgeTokens } = UseWallet()
+
+  const [accounts, setAccounts] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRoninModalOpen, setIsRoninModalOpen] = useState(false)
+  const [roninAddress, setRoninAddress] = useState(null)
+  const [walletBalance, setWalletBalance] = useState(null);
+
+  const [inputValue, setInputValue] = useState()
+
+  const getCurrentAccount = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts.length > 0) {
+        console.log('Currently connected account:', accounts[0]);
+        setAccounts(accounts[0])
+      } else {
+        console.log('No connected accounts found.');
+      }
+    } else {
+      console.log('Ethereum wallet is not installed.');
+    }
+  };
+
+  // Call the getCurrentAccount function when needed, for example on component mount
+  useEffect(() => {
+    getCurrentAccount();
+  }, []);
+
+
+
+  const getWalletBalance = async () => {
+    if (typeof window.ethereum !== 'undefined' && accounts) {
+      const balance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [accounts, 'latest'],
+      });
+      const balanceInEth = utils.formatEther(balance);
+      setWalletBalance(balanceInEth);
+      console.log('Wallet balance:', balanceInEth);
+    } else {
+      console.log('Ethereum wallet is not installed or no account connected.');
+    }
+  };
+
+  useEffect(() => {
+    if (accounts) {
+      getWalletBalance();
+    }
+  }, [accounts]);
+
+  console.log(walletBalance)
+
+  console.log(accounts)
   return (
     <>
       <div className=" flex-1 overflow-x-hidden overflow-y-scroll px-[16px] md:px-[54px]">
@@ -104,58 +161,105 @@ const Bridge = () => {
                               <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh mb-4">
                                 From
                               </div>
-                              <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
-                                <div className="flex items-center gap-12">
-                                  <div className="relative">
-                                    <svg
-                                      viewBox="0 0 32 32"
-                                      width="28"
-                                      height="28"
-                                    >
-                                      <g
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        fillRule="evenodd"
-                                      >
-                                        <circle
-                                          cx="16"
-                                          cy="16"
-                                          r="16"
-                                          fill="#627EEA"
-                                        ></circle>
-                                        <g fill="#FFF" fillRule="nonzero">
-                                          <path
-                                            fillOpacity=".602"
-                                            d="M16.498 4v8.87l7.497 3.35z"
-                                          ></path>
-                                          <path d="M16.498 4L9 16.22l7.498-3.35z"></path>
-                                          <path
-                                            fillOpacity=".602"
-                                            d="M16.498 21.968v6.027L24 17.616z"
-                                          ></path>
-                                          <path d="M16.498 27.995v-6.028L9 17.616z"></path>
-                                          <path
-                                            fillOpacity=".2"
-                                            d="M16.498 20.573l7.497-4.353-7.497-3.348z"
-                                          ></path>
-                                          <path
-                                            fillOpacity=".602"
-                                            d="M9 16.22l7.498 4.353v-7.701z"
-                                          ></path>
+                              {accounts ?
+                                <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
+                                  <div className="flex items-center gap-12">
+                                    <div className="relative">
+                                      <svg viewBox="0 0 32 32" width="28" height="28">
+                                        <g xmlns="http://www.w3.org/2000/svg" fill="none" fillRule="evenodd">
+                                          <circle cx="16" cy="16" r="16" fill="#627EEA"></circle>
+                                          <g fill="#FFF" fillRule="nonzero">
+                                            <path fillOpacity=".602" d="M16.498 4v8.87l7.497 3.35z"></path>
+                                            <path d="M16.498 4L9 16.22l7.498-3.35z"></path>
+                                            <path fillOpacity=".602" d="M16.498 21.968v6.027L24 17.616z"></path>
+                                            <path d="M16.498 27.995v-6.028L9 17.616z"></path>
+                                            <path fillOpacity=".2" d="M16.498 20.573l7.497-4.353-7.497-3.348z"></path>
+                                            <path fillOpacity=".602" d="M9 16.22l7.498 4.353v-7.701z"></path>
+                                          </g>
                                         </g>
-                                      </g>
-                                    </svg>
-                                  </div>
-                                  <div className="inline-flex flex-col items-start">
-                                    <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">
-                                      Ethereum
+                                      </svg>
+                                      <div className="absolute right-[-4px] bottom-[-4px] flex h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-[#000]">
+                                        <div className="flex h-[16px] w-[16px] items-center justify-center rounded-[50%] bg-[#fff] p-[2px] text-[#000] [&>svg]:h-[14px] [&>svg]:w-[14px]">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 253 253">
+                                            <g strokeLinecap="round" strokeLinejoin="round" clipPath="url(#walletgo_metamask)">
+                                              <path fill="#E2761B" stroke="#E2761B" d="m242.1 8.5-99.5 73.9L161 38.8l81.1-30.3Z"></path>
+                                              <path fill="#E4761B" stroke="#E4761B" d="m12.4 8.5 98.7 74.6-17.5-44.3L12.4 8.5Zm193.9 171.3-26.5 40.6 56.7 15.6 16.3-55.3-46.5-.9Zm-204.4.9L18.1 236l56.7-15.6-26.5-40.6-46.4.9Z"></path>
+                                              <path fill="#E4761B" stroke="#E4761B" d="m71.6 111.2-15.8 23.9 56.3 2.5-2-60.5-38.5 34.1Zm111.3 0-39-34.8-1.3 61.2 56.2-2.5-15.9-23.9ZM74.8 220.4l33.8-16.5-29.2-22.8-4.6 39.3Zm71.1-16.5 33.9 16.5-4.7-39.3-29.2 22.8Z"></path>
+                                              <path fill="#D7C1B3" stroke="#D7C1B3" d="m179.8 220.4-33.9-16.5 2.7 22.1-.3 9.3 31.5-14.9Zm-105 0 31.5 14.9-.2-9.3 2.5-22.1-33.8 16.5Z"></path>
+                                              <path fill="#233447" stroke="#233447" d="m106.8 166.5-28.2-8.3 19.9-9.1 8.3 17.4Zm40.9 0 8.3-17.4 20 9.1-28.3 8.3Z"></path>
+                                              <path fill="#CD6116" stroke="#CD6116" d="m74.8 220.4 4.8-40.6-31.3.9 26.5 39.7ZM175 179.8l4.8 40.6 26.5-39.7-31.3-.9Zm23.8-44.7-56.2 2.5 5.2 28.9 8.3-17.4 20 9.1 22.7-23.1ZM78.6 158.2l20-9.1 8.2 17.4 5.3-28.9-56.3-2.5 22.8 23.1Z"></path>
+                                              <path fill="#E4751F" stroke="#E4751F" d="m55.8 135.1 23.6 46-.8-22.9-22.8-23.1Zm120.3 23.1-1 22.9 23.7-46-22.7 23.1Zm-64-20.6-5.3 28.9 6.6 34.1 1.5-44.9-2.8-18.1Zm30.5 0-2.7 18 1.2 45 6.7-34.1-5.2-28.9Z"></path>
+                                              <path fill="#F6851B" stroke="#F6851B" d="m147.8 166.5-6.7 34.1 4.8 3.3 29.2-22.8 1-22.9-28.3 8.3Zm-69.2-8.3.8 22.9 29.2 22.8 4.8-3.3-6.6-34.1-28.2-8.3Z"></path>
+                                              <path fill="#C0AD9E" stroke="#C0AD9E" d="m148.3 235.3.3-9.3-2.5-2.2h-37.7l-2.3 2.2.2 9.3-31.5-14.9 11 9 22.3 15.5h38.3l22.4-15.5 11-9-31.5 14.9Z"></path>
+                                              <path fill="#161616" stroke="#161616" d="m145.9 203.9-4.8-3.3h-27.7l-4.8 3.3-2.5 22.1 2.3-2.2h37.7l2.5 2.2-2.7-22.1Z"></path>
+                                              <path fill="#763D16" stroke="#763D16" d="m246.3 87.2 8.5-40.8-12.7-37.9-96.2 71.4 37 31.3 52.3 15.3 11.6-13.5-5-3.6 8-7.3-6.2-4.8 8-6.1-5.3-4ZM-.2 46.4l8.5 40.8-5.4 4 8 6.1-6.1 4.8 8 7.3-5 3.6 11.5 13.5 52.3-15.3 37-31.3L12.4 8.5-.2 46.4Z"></path>
+                                              <path fill="#F6851B" stroke="#F6851B" d="m235.2 126.5-52.3-15.3 15.9 23.9-23.7 46 31.2-.4h46.5l-17.6-54.2ZM71.6 111.2l-52.3 15.3-17.4 54.2h46.4l31.1.4-23.6-46 15.8-23.9Zm71 26.4 3.3-57.7 15.2-41.1H93.6l15 41.1 3.5 57.7 1.2 18.2.1 44.8h27.7l.2-44.8 1.3-18.2Z"></path>
+                                            </g>
+                                          </svg>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh truncate font-medium md:max-w-[125px]">
-                                      --
+                                    <div className="inline-flex flex-col items-start">
+                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">Ethereum</div>
+                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 truncate font-medium md:max-w-[125px]">
+                                        {accounts.slice(0, 6) + '...' + accounts.slice(-4)}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </button>
+                                </button>
+                                :
+                                <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
+                                  <div className="flex items-center gap-12">
+                                    <div className="relative">
+                                      <svg
+                                        viewBox="0 0 32 32"
+                                        width="28"
+                                        height="28"
+                                      >
+                                        <g
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          fillRule="evenodd"
+                                        >
+                                          <circle
+                                            cx="16"
+                                            cy="16"
+                                            r="16"
+                                            fill="#627EEA"
+                                          ></circle>
+                                          <g fill="#FFF" fillRule="nonzero">
+                                            <path
+                                              fillOpacity=".602"
+                                              d="M16.498 4v8.87l7.497 3.35z"
+                                            ></path>
+                                            <path d="M16.498 4L9 16.22l7.498-3.35z"></path>
+                                            <path
+                                              fillOpacity=".602"
+                                              d="M16.498 21.968v6.027L24 17.616z"
+                                            ></path>
+                                            <path d="M16.498 27.995v-6.028L9 17.616z"></path>
+                                            <path
+                                              fillOpacity=".2"
+                                              d="M16.498 20.573l7.497-4.353-7.497-3.348z"
+                                            ></path>
+                                            <path
+                                              fillOpacity=".602"
+                                              d="M9 16.22l7.498 4.353v-7.701z"
+                                            ></path>
+                                          </g>
+                                        </g>
+                                      </svg>
+                                    </div>
+                                    <div className="inline-flex flex-col items-start">
+                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">
+                                        Ethereum
+                                      </div>
+                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh truncate font-medium md:max-w-[125px]">
+                                        --
+                                      </div>
+                                    </div>
+                                  </div>
+                                </button>}
                             </div>
                             <div className="hidden pt-24 md:block">
                               <button
@@ -181,6 +285,7 @@ const Bridge = () => {
                             </div>
                             <div className="relative mt-[18px] flex w-full flex-col md:mt-0">
                               <button
+
                                 type="button"
                                 className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-small__Nes6W button-module_icon-button__-UBF4 button-module_button-root__0roWY absolute top-[-18px] left-1/2 inline-flex -translate-x-1/2 md:hidden"
                               >
@@ -201,7 +306,12 @@ const Bridge = () => {
                               <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh mb-4">
                                 To
                               </div>
-                              <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  setIsRoninModalOpen(true)
+                                }}
+                                className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
                                 <div className="flex items-center gap-12">
                                   <svg
                                     viewBox="0 0 28 28"
@@ -234,7 +344,7 @@ const Bridge = () => {
                                       Ronin
                                     </div>
                                     <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh truncate font-medium md:max-w-[125px]">
-                                      --
+                                      {roninAddress ? roninAddress.slice(0, 6) + '...' + roninAddress.slice(-4) : '--'}
                                     </div>
                                   </div>
                                 </div>
@@ -278,17 +388,23 @@ const Bridge = () => {
                                   <div className="flex items-center gap-8">
                                     <input
                                       placeholder="0"
+                                      value={inputValue}
                                       className="text-display-m relative w-full overflow-hidden overflow-ellipsis whitespace-nowrap border-0 bg-transparent p-0 text-right text-inherit"
-                                      value=""
+                                      onChange={(e) => {
+                                        setInputValue(e.target.value)
+                                      }}
                                     />
                                   </div>
                                 </div>
                               </div>
                               <div className="inline-flex items-baseline gap-4 overflow-hidden">
                                 <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh max-w-[80%] shrink-0 truncate md:max-w-[90%]">
-                                  Balance: --
+                                  Balance: {walletBalance ? walletBalance : '--'}
                                 </div>
                                 <div
+                                  onClick={() => {
+                                    walletBalance && setInputValue(walletBalance)
+                                  }}
                                   className="typo-module_t-body-md-strong__B-Sd1 typo-module_mobile-t-body-md-strong__Kd9tc typo-module_neutral__9orA9 text-tc-itr-link"
                                   role="button"
                                 >
@@ -324,16 +440,26 @@ const Bridge = () => {
                               ~$--
                             </div>
                           </div>
-                          <button
+                          {accounts ? <button
                             onClick={(e) => {
-                              setIsModalOpen(true);
+                              bridgeTokens()
                               e.preventDefault();
                             }}
                             // role="submit"
                             className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-default__caw9O button-module_full__Lcze1 button-module_button-root__0roWY"
                           >
-                            Connect Wallet
-                          </button>
+                            Enter Recipient Address
+                          </button> :
+                            <button
+                              onClick={(e) => {
+                                setIsModalOpen(true);
+                                e.preventDefault();
+                              }}
+                              // role="submit"
+                              className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-default__caw9O button-module_full__Lcze1 button-module_button-root__0roWY"
+                            >
+                              Connect Wallet
+                            </button>}
                         </form>
                       </div>
                     </div>
@@ -379,6 +505,9 @@ const Bridge = () => {
           isModalOpen={isModalOpen}
         />
       )}
+      {
+        isRoninModalOpen && <RoninBridgeModal setIsRoninModalOpen={setIsRoninModalOpen} roninAddress={roninAddress} setRoninAddress={setRoninAddress} />
+      }
     </>
   );
 };

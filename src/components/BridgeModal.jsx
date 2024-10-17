@@ -4,6 +4,8 @@ import { WalletSDK } from "@roninnetwork/wallet-sdk";
 import { useConnect, useSwitchChain } from "wagmi";
 const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
   const [userAddress, setUserAddress] = useState();
+
+
   const { connectors, connect } = useConnect();
   const { chains, switchChain } = useSwitchChain();
   const validConnectors = connectors.filter((connector) => {
@@ -21,7 +23,7 @@ const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
     window.open("https://wallet.roninchain.com", "_blank");
     return false;
   }
-  console.log(chains, validConnectors);
+  console.log(chains, validConnectors, metamaskConnector);
 
   async function connectRoninWallet(props) {
     const sdk = new WalletSDK();
@@ -79,7 +81,7 @@ const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
                   </div>
                   <div className="Body-module_container__NGN-i Wallets-module_container__-8YJe">
                     <button
-                      onClick={() => connect({ connector: metamaskConnector })}
+                      onClick={() => { metamaskConnector.connect(); console.log('clicked') }}
                       className="WalletItem-module_wallet__KTP1j"
                     >
                       <div className="WalletItem-module_logo__94Xqd">

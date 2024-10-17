@@ -3,25 +3,28 @@ import useStore from "../store/store";
 import HeaderConnected from "./HeaderConnected";
 import { Link } from "react-router-dom";
 const Header = () => {
-  const { setIsModalOpen, setIsMobileSidebarOpen, userAddress, isMobileSidebarOpen } = useStore();
-  console.log(isMobileSidebarOpen)
+  const { setIsModalOpen, isModalOpen, setIsMobileSidebarOpen, userAddress, isMobileSidebarOpen } = useStore();
   return (
     <header className="sticky top-0 z-sticky flex h-[64px] items-center justify-between bg-tc-bg md:h-[80px]">
       <div className="flex items-center gap-24 2xl:hidden">
-        <svg
-          onClick={() => { setIsMobileSidebarOpen(true); console.log('clicked', isMobileSidebarOpen) }}
-          className="cursor-pointer text-tc-icon"
-          viewBox="0 0 20 20"
-          width="24"
-          height="24"
+        <button
+          onClick={() => { setIsMobileSidebarOpen(true); console.log('clicked', isMobileSidebarOpen, isModalOpen) }}
         >
-          <path
-            fill="currentColor"
-            fillRule="evenodd"
-            d="M17 3H3c-.6 0-1 .4-1 1s.4 1 1 1h14c.6 0 1-.4 1-1s-.4-1-1-1Zm0 6H3c-.6 0-1 .4-1 1s.4 1 1 1h14c.6 0 1-.4 1-1s-.4-1-1-1ZM3 15h14c.6 0 1 .4 1 1s-.4 1-1 1H3c-.6 0-1-.4-1-1s.4-1 1-1Z"
-            clipRule="evenodd"
-          ></path>
-        </svg>
+          <svg
+
+            className="cursor-pointer text-tc-icon"
+            viewBox="0 0 20 20"
+            width="24"
+            height="24"
+          >
+            <path
+              fill="currentColor"
+              fillRule="evenodd"
+              d="M17 3H3c-.6 0-1 .4-1 1s.4 1 1 1h14c.6 0 1-.4 1-1s-.4-1-1-1Zm0 6H3c-.6 0-1 .4-1 1s.4 1 1 1h14c.6 0 1-.4 1-1s-.4-1-1-1ZM3 15h14c.6 0 1 .4 1 1s-.4 1-1 1H3c-.6 0-1-.4-1-1s.4-1 1-1Z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+        </button>
         <Link
           className="typo-module_t-body-md-strong__B-Sd1 typo-module_mobile-t-body-md-strong__Kd9tc typo-module_neutral__9orA9 link-module_link__Nwimt link-module_underline-mode-onlyWhenHover__alkql undefined"
           to="/"
@@ -50,7 +53,7 @@ const Header = () => {
           </svg>
         </Link>
       </div>
-      {userAddress.length > 0 ? (
+      {userAddress?.length > 0 ? (
         <HeaderConnected />
       ) : (
         <div className="flex items-center gap-24 2xl:hidden">

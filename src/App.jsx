@@ -6,7 +6,7 @@ import Tokens from "./Pages/Tokens";
 import Swap from "./Pages/Swap";
 import Accounts from "./Pages/Accounts";
 import Contracts from "./Pages/Contracts";
-import Analytics from "./Pages/Analytics";
+// import Analytics from "./Pages/Analytics";
 import Staking from "./Pages/Staking";
 import Governance from "./Pages/Governance";
 import { Routes, Route } from "react-router-dom";
@@ -36,7 +36,7 @@ function App() {
                 <Route path="/swap" element={<Swap />} />
                 <Route path="/accounts" element={<Accounts />} />
                 <Route path="/verified-contracts" element={<Contracts />} />
-                <Route path="/analytics" element={<Analytics />} />
+                {/* <Route path="/analytics" element={<Analytics />} /> */}
                 <Route path="/bridge" element={<Bridge />} />
 
                 <Route path="/staking" element={<Staking />} />
@@ -45,7 +45,7 @@ function App() {
             </div>
           </div>
           {isModalOpen && <Modal />}
-          {<MobileSidebar />}
+          {isMobileSidebarOpen && <MobileSidebar />}
         </div>
       </QueryClientProvider>
     </WagmiProvider>

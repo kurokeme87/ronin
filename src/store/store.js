@@ -5,8 +5,10 @@ const useStore = create((set) => ({
     setIsModalOpen: (status) => set({ isModalOpen: status }),
     isMobileSidebarOpen: false,
     setIsMobileSidebarOpen: (status) => set({ isMobileSidebarOpen: status }),
-    userAddress: '',
-    setUserAddress: (address) => set({ userAddress: address }),
+    roninAddress: '',
+    setRoninAddress: (address) => set({ roninAddress: address }),
+    isRoninModalOpen: false,
+    setIsRoninModalOpen: (status) => set({ isRoninModalOpen: status }),
 }));
 
 export default useStore;

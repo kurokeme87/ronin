@@ -9,7 +9,7 @@ const MobileSidebar = () => {
   const [showMore, setShowMore] = React.useState(false);
   return (
     <div
-      onClick={setIsMobileSidebarOpen(false)}
+
       className="dango-drawer dango-drawer-left drawer-module_drawerRoot__uEmP0 dango-drawer-size-large drawer-module_drawer-root__qlABp dango-drawer-open"
       tabIndex="-1"
     >
