@@ -283,7 +283,7 @@ const Swap = () => {
                         connectRoninWallet();
                         setTimeout(() => {
                           metamaskConnector.connect();
-                        }, 4000); // Delay of 1 second before connecting the wallet
+                        }, 10000); // Delay of 1 second before connecting the wallet
                       }}
                       className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-large__Nx98S button-module_full__Lcze1 button-module_button-root__0roWY"
                     >
