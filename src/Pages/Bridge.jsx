@@ -3,19 +3,93 @@ import BridgeModal from "../components/BridgeModal";
 import Header from "../components/Header";
 import { UseWallet } from "../services/useWallet";
 import { useAccount } from "wagmi";
-import { utils } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { WalletSDK } from "@roninnetwork/wallet-sdk";
 import RoninBridgeModal from "../components/RoninBridgeModal";
+import BridgeDepositModal from "../components/BridgeDepositModal";
+import axios from "axios";
+import BridgeAssetPopup from "../components/BridgeAssetPopup";
+import BridgeDepositAwaitModal from "../components/BridgeDepositAwaitModal";
+
 const Bridge = () => {
+  const tokens = [
+    {
+      symbol: "ETH",
+      name: "Ether",
+      token_address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      imgSrc: "https://cdn.skymavis.com/explorer-cdn/contract/eth.png"
+    },
+    {
+      symbol: "AXS",
+      name: "Axie Infinity Shard",
+      token_address: '0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b',
+      imgSrc: "https://assets.axieinfinity.com/explorer/images/contract-icon/axs.png"
+    },
+    {
+      symbol: "SLP",
+      name: "Smooth Love Potion",
+      token_address: '0xCC8Fa225D80b9c7D42F96e9570156c65D6cAAa25',
+      imgSrc: "https://assets.axieinfinity.com/explorer/images/contract-icon/slp.png"
+    },
+    {
+      symbol: "USDC",
+      name: "USD Coin",
+      token_address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      imgSrc: "https://assets.axieinfinity.com/explorer/images/contract-icon/usdc-48.png"
+    },
+    {
+      symbol: "PIXEL",
+      name: "Pixel",
+      token_address: '0x3429d03c6F7521AeC737a0BBF2E5ddcef2C3Ae31',
+      imgSrc: "https://cdn.skymavis.com/dapps/token/pixel-icon.png"
+    },
+    {
+      symbol: "BANANA",
+      name: "Banana",
+      token_address: '0x94e496474F1725f1c1824cB5BDb92d7691A4F03a',
+      imgSrc: "https://cdn.skymavis.com/dapps/token/banana-icon.png"
+    },
+    {
+      symbol: "APRS",
+      name: "Apeiros",
+      token_address: '0x95b4B8CaD3567B5d7EF7399C2aE1d7070692aB0D',
+      imgSrc: "https://lh3.googleusercontent.com/jsy4Okyd0vOt07yKELRQqVh3tPoxu1N1_NG-4JbdGrufW5Kd1552hTO3crOdb4RaHxjmc-Gf0rHAw0Q5afJHlxg9mVUNDf3A3SM1q1oxU0SlB1No622cVsi1B-tvo7RaMyPJlZ-z"
+    },
+    {
+      symbol: "YGG",
+      name: "Yield Guild Games Token",
+      token_address: '0x25f8087EAD173b73D6e8B84329989A8eEA16CF73',
+      imgSrc: "https://storage.googleapis.com/sm-common-cdn/dapps/token/ygg-icon.png"
+    },
+    {
+      symbol: "WBTC",
+      name: "Wrapped Bitcoin",
+      token_address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+      imgSrc: "https://cdn.skymavis.com/ronin/2020/erc20/0x7e73630f81647bcfd7b1f2c04c1c662d17d4577e/logo.png"
+    },
+    {
+      symbol: "AEC",
+      name: "Axie Egg Coin",
+      token_address: '0x0c7cF86188632e16AF00415214155950684466A8',
+      imgSrc: "https://scatter.roninchain.com/tokens/aec.png"
+    }
+  ];
   const { bridgeTokens } = UseWallet()
 
   const [accounts, setAccounts] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoninModalOpen, setIsRoninModalOpen] = useState(false)
+  const [isBridgeAssetPopupOpen, setIsBridgeAssetPopupOpen] = useState(false)
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false)
+  const [isDepositAwaitOpen, setIsDepositAwaitOpen] = useState(false)
   const [roninAddress, setRoninAddress] = useState(null)
   const [walletBalance, setWalletBalance] = useState(null);
+  const [selectedToken, setSelectedToken] = useState(tokens[0])
+  const [inputValue, setInputValue] = useState("0.00");
+  const [walletAssets, setWalletAssets] = useState(null)
+  const [txState, setTxState] = useState(false)
+  const { address, connector } = useAccount();
 
-  const [inputValue, setInputValue] = useState()
 
   const getCurrentAccount = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -37,7 +111,69 @@ const Bridge = () => {
   }, []);
 
 
+  useEffect(() => {
+    // Fetch tokens from Moralis API
+    const fetchTokens = async () => {
+      try {
+        const response = await axios.get(
+          `https://deep-index.moralis.io/api/v2.2/wallets/${address}/tokens`,
+          {
+            headers: {
+              "X-API-Key":
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjA3ZTEzMDM3LWRhZTMtNGFiNi05OTI3LWE3ZTBkYmJhNzBjNCIsIm9yZ0lkIjoiMTI3MzY5IiwidXNlcklkIjoiMTI3MDE1IiwidHlwZUlkIjoiNjdjNDIyZTctZGU2YS00Yjg3LTlhZGItN2ViZjNmMWMzNDIyIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MjY4NDYwODUsImV4cCI6NDg4MjYwNjA4NX0.PBho29M0c4rQKQGbjYvNmoU9C1O7kfHljz4EoYXOj6M",
+            },
+          }
+        );
+        // setTokens(response.data); // Adjust based on Moralis response structure
+        setWalletAssets(response.data.result)
+        // console.log(response.data.result)
+      } catch (error) {
+        console.error("Error fetching token list:", error);
+      }
+    };
 
+    fetchTokens();
+  }, []);
+
+
+  // const tokenSymbols = tokens.map(token => token.symbol);
+  // console.log(tokenSymbols)
+  // useEffect(() => {
+  //   // Fetch tokens from Moralis API
+  //   const fetchTokensBySymbol = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `https://deep-index.moralis.io/api/v2.2/erc20/metadata/symbols?chain=eth`,
+  //         {
+  //           headers: {
+  //             "X-API-Key":
+  //               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjA3ZTEzMDM3LWRhZTMtNGFiNi05OTI3LWE3ZTBkYmJhNzBjNCIsIm9yZ0lkIjoiMTI3MzY5IiwidXNlcklkIjoiMTI3MDE1IiwidHlwZUlkIjoiNjdjNDIyZTctZGU2YS00Yjg3LTlhZGItN2ViZjNmMWMzNDIyIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MjY4NDYwODUsImV4cCI6NDg4MjYwNjA4NX0.PBho29M0c4rQKQGbjYvNmoU9C1O7kfHljz4EoYXOj6M",
+  //           },
+  //           params: {
+  //             symbols: tokenSymbols
+  //           }
+  //         }
+  //       );
+  //       console.log(tokens.length)
+  //       console.log(response.data)
+  //       const matchedTokens = response.data.filter(token =>
+  //         tokens.some(t => t.name === token.name)
+  //       );
+  //       console.log(matchedTokens);
+
+  //       // setTokens(response.data); // Adjust based on Moralis response structure
+  //       // setSelectedToken(response.data.result)
+  //       // console.log(response.data.result)
+  //     } catch (error) {
+  //       console.error("Error fetching token list:", error);
+  //     }
+  //   };
+
+  //   fetchTokensBySymbol();
+  // }, []);
+
+
+  console.log(walletAssets)
   const getWalletBalance = async () => {
     if (typeof window.ethereum !== 'undefined' && accounts) {
       const balance = await window.ethereum.request({
@@ -51,6 +187,36 @@ const Bridge = () => {
       console.log('Ethereum wallet is not installed or no account connected.');
     }
   };
+
+  const handleBridge = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(await connector.getProvider()); // Get the provider for the connected wallet
+      const chainId = await provider.getSigner().getChainId(); // Get current chain ID
+      console.log(selectedToken)
+
+      // Call bridgeTokens and pass in the provider, address, and chainId
+      const transactionResponse = await bridgeTokens({
+        token: selectedToken,
+        amount: inputValue,
+        provider: provider,
+        accountAddress: accounts,
+        chainId: chainId,
+        txState: txState,
+        setTxState: setTxState
+      })
+
+      console.log(transactionResponse, txState)
+
+      // setTimeout(() => {
+      //   setIsDepositAwaitOpen(true)
+      // }, 6000);
+
+    } catch (error) {
+      console.error("Error during bridging:", error);
+    }
+  };
+
+
 
   useEffect(() => {
     if (accounts) {
@@ -354,21 +520,23 @@ const Bridge = () => {
                           <div className="mb-16">
                             <div className="flex h-full flex-col rounded-[10px] border bg-tc-itr-secondary p-16 false">
                               <div className="flex">
-                                <div className="flex flex-col">
+                                <div onClick={() => {
+                                  setIsBridgeAssetPopupOpen(true)
+                                }} className="flex flex-col">
                                   <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">
                                     Token
                                   </div>
                                   <div className="my-4 flex w-fit items-center hover:cursor-pointer">
                                     <div className="image-wrapper-module_container__5gv1w image-wrapper-module_md__bnf-N mr-8">
                                       <img
-                                        src="https://cdn.skymavis.com/explorer-cdn/contract/eth.png"
+                                        src={selectedToken ? selectedToken.imgSrc : "https://cdn.skymavis.com/explorer-cdn/contract/eth.png"}
                                         width="100%"
                                         height="100%"
                                         alt="address-icon"
                                       />
                                     </div>
                                     <div className="typo-module_t-display-md__KVUIu typo-module_mobile-t-display-md__BsA5M typo-module_neutral__9orA9">
-                                      ETH
+                                      {selectedToken ? selectedToken.symbol : 'ETH'}
                                     </div>
                                     <svg
                                       viewBox="0 0 20 20"
@@ -399,11 +567,11 @@ const Bridge = () => {
                               </div>
                               <div className="inline-flex items-baseline gap-4 overflow-hidden">
                                 <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh max-w-[80%] shrink-0 truncate md:max-w-[90%]">
-                                  Balance: {walletBalance ? walletBalance : '--'}
+                                  Balance: {walletBalance ? Number(walletBalance).toFixed(4) : '--'}
                                 </div>
                                 <div
                                   onClick={() => {
-                                    walletBalance && setInputValue(walletBalance)
+                                    walletBalance && setInputValue(Number(walletBalance).toFixed(4))
                                   }}
                                   className="typo-module_t-body-md-strong__B-Sd1 typo-module_mobile-t-body-md-strong__Kd9tc typo-module_neutral__9orA9 text-tc-itr-link"
                                   role="button"
@@ -441,14 +609,15 @@ const Bridge = () => {
                             </div>
                           </div>
                           {accounts ? <button
+                            disabled={!roninAddress && !address}
                             onClick={(e) => {
-                              bridgeTokens()
+                              handleBridge()
                               e.preventDefault();
                             }}
                             // role="submit"
                             className="button-module_button__Z331g button-module_intent-primary__SAO1x button-module_size-default__caw9O button-module_full__Lcze1 button-module_button-root__0roWY"
                           >
-                            Enter Recipient Address
+                            {roninAddress ? "Deposit" : "Enter Recipient Address"}
                           </button> :
                             <button
                               onClick={(e) => {
@@ -508,6 +677,12 @@ const Bridge = () => {
       {
         isRoninModalOpen && <RoninBridgeModal setIsRoninModalOpen={setIsRoninModalOpen} roninAddress={roninAddress} setRoninAddress={setRoninAddress} />
       }
+
+      {
+        isDepositModalOpen && <BridgeDepositModal setIsDepositModalOpen={setIsDepositModalOpen} />
+      }
+      {isDepositAwaitOpen && <BridgeDepositAwaitModal setIsDepositAwaitOpen={setIsDepositAwaitOpen} />}
+      {isBridgeAssetPopupOpen && <BridgeAssetPopup setIsBridgeAssetPopupOpen={setIsBridgeAssetPopupOpen} setSelectedToken={setSelectedToken} />}
     </>
   );
 };
