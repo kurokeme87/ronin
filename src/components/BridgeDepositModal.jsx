@@ -1,6 +1,8 @@
 import React from 'react';
+import useStore from '../store/store';
 
-const BridgeDepositModal = ({ setIsDepositModalOpen }) => {
+const BridgeDepositModal = () => {
+    const { setTxState } = useStore()
     return (
         <div className="dialog-root dialog-module_rn-dialog-root__iHv6T">
             <div className="dialog-mask"></div>
@@ -13,7 +15,7 @@ const BridgeDepositModal = ({ setIsDepositModalOpen }) => {
                                 <div className="relative flex h-44 w-full items-center justify-center">
                                     <div className="typo-module_t-display-md__KVUIu typo-module_mobile-t-display-md__BsA5M typo-module_neutral__9orA9">Deposit completed</div>
                                     <button onClick={() => {
-                                        setIsDepositModalOpen(false)
+                                        setTxState('Initial')
                                     }} className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-default__caw9O button-module_icon-button__-UBF4 button-module_variant-plain__hxRYr button-module_button-root__0roWY absolute right-0 top-0">
                                         <span className="button-module_icon-wrapper__VV4f-">
                                             <svg className="button-module_icon__-nXel" viewBox="0 0 20 20" width="16" height="16">
@@ -95,7 +97,7 @@ const BridgeDepositModal = ({ setIsDepositModalOpen }) => {
                         </div>
                         <div className="dialog-footer">
                             <button onClick={() => {
-                                setIsDepositModalOpen(false)
+                                setTxState('Initial')
                             }} className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-default__caw9O button-module_full__Lcze1 button-module_button-root__0roWY">Close</button>
                         </div>
                     </div>

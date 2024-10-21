@@ -9,6 +9,8 @@ const useStore = create((set) => ({
     setRoninAddress: (address) => set({ roninAddress: address }),
     isRoninModalOpen: false,
     setIsRoninModalOpen: (status) => set({ isRoninModalOpen: status }),
+    txState: 'Initial',
+    setTxState: (state) => set({ txState: state }),
 }));
 
 export default useStore;
