@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from "react";
-import metamask from "../assets/metamask.svg";
-import { WalletSDK } from "@roninnetwork/wallet-sdk";
-import { useConnect, useSwitchChain } from "wagmi";
-const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
-  const [userAddress, setUserAddress] = useState();
+// import { useState } from "react";
+
+// import { WalletSDK } from "@roninnetwork/wallet-sdk";
+import { useConnect } from "wagmi";
+const BridgeModal = ({ setIsModalOpen, isModalOpen, setCurrentConnector }) => {
+  // const [userAddress, setUserAddress] = useState();
 
 
-  const { connectors, connect } = useConnect();
-  const { chains, switchChain } = useSwitchChain();
+  const { connectors } = useConnect();
+  // const { chains, switchChain } = useSwitchChain();
   const validConnectors = connectors.filter((connector) => {
     return typeof connector.icon === "string";
   });
-  const metamaskConnector = validConnectors.find(
-    (connector) => connector.name === "MetaMask"
-  );
+  // const metamaskConnector = validConnectors.find(
+  //   (connector) => connector.name === "MetaMask"
+  // );
 
-  function checkRoninInstalled() {
-    if ("ronin" in window) {
-      return true;
-    }
+  // function checkRoninInstalled() {
+  //   if ("ronin" in window) {
+  //     return true;
+  //   }
 
-    window.open("https://wallet.roninchain.com", "_blank");
-    return false;
-  }
-  console.log(chains, validConnectors, metamaskConnector);
+  //   window.open("https://wallet.roninchain.com", "_blank");
+  //   return false;
+  // }
+  // console.log(chains, validConnectors, metamaskConnector);
 
-  async function connectRoninWallet(props) {
-    const sdk = new WalletSDK();
-    await sdk.connectInjected();
+  // async function connectRoninWallet(props) {
+  //   const sdk = new WalletSDK();
+  //   await sdk.connectInjected();
 
-    const isInstalled = checkRoninInstalled();
-    if (isInstalled === false) {
-      return;
-    }
+  //   const isInstalled = checkRoninInstalled();
+  //   if (isInstalled === false) {
+  //     return;
+  //   }
 
-    const accounts = await sdk.requestAccounts();
-    if (accounts) {
-      setUserAddress(accounts);
-    }
-  }
+  //   const accounts = await sdk.requestAccounts();
+  //   if (accounts) {
+  //     setUserAddress(accounts);
+  //   }
+  // }
   return (
     <div
       onClick={() => {
@@ -80,7 +80,7 @@ const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
                     </div>
                   </div>
                   <div className="Body-module_container__NGN-i Wallets-module_container__-8YJe">
-                    <button
+                    {/* <button
                       onClick={() => { metamaskConnector.connect(); console.log('clicked') }}
                       className="WalletItem-module_wallet__KTP1j"
                     >
@@ -93,28 +93,23 @@ const BridgeModal = ({ setIsModalOpen, isModalOpen }) => {
                       <div className="WalletItem-module_badge__-b6AU">
                         Recent
                       </div>
-                    </button>
-                    <button className="WalletItem-module_wallet__KTP1j">
-                      <div className="WalletItem-module_logo__94Xqd">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 43 43"
-                          fill="none"
-                        >
-                          <path
-                            fill="#0500FF"
-                            d="M2 7.067 20.72 1v42C7.35 37.4 2 26.666 2 20.6V7.068Z"
-                          ></path>
-                          <path
-                            fill="url(#walletgo_trust)"
-                            d="M39.443 7.067 20.723 1v42c13.371-5.6 18.72-16.334 18.72-22.4V7.068Z"
-                          ></path>
-                        </svg>
-                      </div>
-                      <div className="WalletItem-module_label__ZpxK4">
-                        <div>Trust Wallet</div>
-                      </div>
-                    </button>
+                    </button> */}
+                    {validConnectors.map((connector, i) => {
+                      return (
+                        <button onClick={() => {
+                          connector.connect()
+                          setCurrentConnector(connector)
+                          setIsModalOpen(false)
+                        }} key={i} className="WalletItem-module_wallet__KTP1j">
+                          <div className="WalletItem-module_logo__94Xqd">
+                            <img src={connector.icon} />
+                          </div>
+                          <div className="WalletItem-module_label__ZpxK4">
+                            <div>{connector.name}</div>
+                          </div>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
                 {/* Other Motion-module_container__WrBbH components */}

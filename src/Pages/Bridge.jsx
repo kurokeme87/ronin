@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BridgeModal from "../components/BridgeModal";
 import Header from "../components/Header";
 import { UseWallet } from "../services/useWallet";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { ethers, utils } from 'ethers'
 import { WalletSDK } from "@roninnetwork/wallet-sdk";
 import RoninBridgeModal from "../components/RoninBridgeModal";
@@ -13,6 +13,25 @@ import BridgeDepositAwaitModal from "../components/BridgeDepositAwaitModal";
 import useStore from "../store/store";
 
 const Bridge = () => {
+  const { address, connector } = useAccount();
+  const { disconnect } = useDisconnect();
+  const [accounts, setAccounts] = useState()
+  const [currentConnector, setCurrentConnector] = useState(null)
+  // setTimeout(() => {
+  //   disconnect()
+  // }, 4000)
+
+  const hasMounted = useRef(false); // Create a ref to track if the component has mounted
+
+  useEffect(() => {
+    // Disconnect any connected wallet only on initial page load
+    if (!hasMounted.current && address) {
+
+      disconnect();
+      hasMounted.current = true; // Set to true after the first run
+    }
+  }, [address, accounts]);
+
   const tokens = [
     {
       symbol: "ETH",
@@ -78,8 +97,6 @@ const Bridge = () => {
 
 
 
-
-  const [accounts, setAccounts] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoninModalOpen, setIsRoninModalOpen] = useState(false)
   const [isBridgeAssetPopupOpen, setIsBridgeAssetPopupOpen] = useState(false)
@@ -91,7 +108,6 @@ const Bridge = () => {
   const [inputValue, setInputValue] = useState("0.00");
   const [walletAssets, setWalletAssets] = useState(null)
   const { txState, setTxState } = useStore()
-  const { address, connector } = useAccount();
   const { bridgeTokens } = UseWallet()
 
   const getCurrentAccount = async () => {
@@ -99,7 +115,8 @@ const Bridge = () => {
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       if (accounts.length > 0) {
         console.log('Currently connected account:', accounts[0]);
-        setAccounts(accounts[0])
+        const connectedAddress = await currentConnector?.getAccount()
+        setAccounts(connectedAddress)
       } else {
         console.log('No connected accounts found.');
       }
@@ -111,7 +128,7 @@ const Bridge = () => {
   // Call the getCurrentAccount function when needed, for example on component mount
   useEffect(() => {
     getCurrentAccount();
-  }, []);
+  }, [accounts, address]);
 
 
   useEffect(() => {
@@ -136,7 +153,7 @@ const Bridge = () => {
     };
 
     fetchTokens();
-  }, []);
+  }, [address]);
 
 
   // const tokenSymbols = tokens.map(token => token.symbol);
@@ -176,12 +193,12 @@ const Bridge = () => {
   // }, []);
 
 
-  console.log(walletAssets)
+
   const getWalletBalance = async () => {
     if (typeof window.ethereum !== 'undefined' && accounts) {
       const balance = await window.ethereum.request({
         method: 'eth_getBalance',
-        params: [accounts, 'latest'],
+        params: [address, 'latest'],
       });
       const balanceInEth = utils.formatEther(balance);
       setWalletBalance(balanceInEth);
@@ -193,7 +210,7 @@ const Bridge = () => {
 
   const handleBridge = async () => {
     try {
-      const provider = new ethers.providers.Web3Provider(await connector.getProvider()); // Get the provider for the connected wallet
+      const provider = new ethers.providers.Web3Provider(await currentConnector.getProvider()); // Get the provider for the connected wallet
       const chainId = await provider.getSigner().getChainId(); // Get current chain ID
       console.log(selectedToken)
 
@@ -216,14 +233,14 @@ const Bridge = () => {
 
 
   useEffect(() => {
+
     if (accounts) {
+      // disconnect()
       getWalletBalance();
     }
   }, [accounts]);
 
-  console.log(walletBalance)
-  console.log(txState)
-  console.log(accounts)
+  console.log(walletBalance, currentConnector, walletAssets)
   return (
     <>
       <div className=" flex-1 overflow-x-hidden overflow-y-scroll px-[16px] md:px-[54px]">
@@ -325,7 +342,10 @@ const Bridge = () => {
                                 From
                               </div>
                               {accounts ?
-                                <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
+                                <button onClick={(e) => {
+                                  e.preventDefault()
+                                  setIsModalOpen(true)
+                                }} className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
                                   <div className="flex items-center gap-12">
                                     <div className="relative">
                                       <div className="image-wrapper-module_container__5gv1w image-wrapper-module_md__bnf-N mr-8">
@@ -340,7 +360,8 @@ const Bridge = () => {
                                         right: '2px'
                                       }} className="absolute  bottom-[-4px] flex h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-[#000]">
                                         <div className="flex h-[16px] w-[16px] items-center justify-center rounded-[50%] bg-[#fff] p-[2px] text-[#000] [&>svg]:h-[14px] [&>svg]:w-[14px]">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 253 253">
+                                          <img style={{ height: '100%', width: '100%', objectFit: 'cover' }} src={currentConnector?.icon} />
+                                          {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 253 253">
                                             <g strokeLinecap="round" strokeLinejoin="round" clipPath="url(#walletgo_metamask)">
                                               <path fill="#E2761B" stroke="#E2761B" d="m242.1 8.5-99.5 73.9L161 38.8l81.1-30.3Z"></path>
                                               <path fill="#E4761B" stroke="#E4761B" d="m12.4 8.5 98.7 74.6-17.5-44.3L12.4 8.5Zm193.9 171.3-26.5 40.6 56.7 15.6 16.3-55.3-46.5-.9Zm-204.4.9L18.1 236l56.7-15.6-26.5-40.6-46.4.9Z"></path>
@@ -355,14 +376,14 @@ const Bridge = () => {
                                               <path fill="#763D16" stroke="#763D16" d="m246.3 87.2 8.5-40.8-12.7-37.9-96.2 71.4 37 31.3 52.3 15.3 11.6-13.5-5-3.6 8-7.3-6.2-4.8 8-6.1-5.3-4ZM-.2 46.4l8.5 40.8-5.4 4 8 6.1-6.1 4.8 8 7.3-5 3.6 11.5 13.5 52.3-15.3 37-31.3L12.4 8.5-.2 46.4Z"></path>
                                               <path fill="#F6851B" stroke="#F6851B" d="m235.2 126.5-52.3-15.3 15.9 23.9-23.7 46 31.2-.4h46.5l-17.6-54.2ZM71.6 111.2l-52.3 15.3-17.4 54.2h46.4l31.1.4-23.6-46 15.8-23.9Zm71 26.4 3.3-57.7 15.2-41.1H93.6l15 41.1 3.5 57.7 1.2 18.2.1 44.8h27.7l.2-44.8 1.3-18.2Z"></path>
                                             </g>
-                                          </svg>
+                                          </svg> */}
                                         </div>
                                       </div>
                                     </div>
                                     <div className="inline-flex flex-col items-start">
                                       <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">{selectedToken.name}</div>
                                       <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 truncate font-medium md:max-w-[125px]">
-                                        {accounts.slice(0, 6) + '...' + accounts.slice(-4)}
+                                        {accounts && accounts.slice(0, 6) + '...' + accounts.slice(-4)}
                                       </div>
                                     </div>
                                   </div>
@@ -664,6 +685,7 @@ const Bridge = () => {
       </div >
       {isModalOpen && (
         <BridgeModal
+          setCurrentConnector={setCurrentConnector}
           setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
         />
