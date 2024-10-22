@@ -1,7 +1,7 @@
 import React from 'react';
 import useStore from '../store/store';
 
-const BridgeDepositModal = () => {
+const BridgeDepositModal = ({ selectedToken }) => {
     const { setTxState } = useStore()
     return (
         <div className="dialog-root dialog-module_rn-dialog-root__iHv6T">
@@ -56,20 +56,9 @@ const BridgeDepositModal = () => {
                                 </div>
                                 <div className="mt-4 flex justify-between">
                                     <div className="flex items-center">
-                                        <svg viewBox="0 0 32 32" width="16" height="16">
-                                            <g xmlns="http://www.w3.org/2000/svg" fill="none" fillRule="evenodd">
-                                                <circle cx="16" cy="16" r="16" fill="#627EEA"></circle>
-                                                <g fill="#FFF" fillRule="nonzero">
-                                                    <path fillOpacity=".602" d="M16.498 4v8.87l7.497 3.35z"></path>
-                                                    <path d="M16.498 4L9 16.22l7.498-3.35z"></path>
-                                                    <path fillOpacity=".602" d="M16.498 21.968v6.027L24 17.616z"></path>
-                                                    <path d="M16.498 27.995v-6.028L9 17.616z"></path>
-                                                    <path fillOpacity=".2" d="M16.498 20.573l7.497-4.353-7.497-3.348z"></path>
-                                                    <path fillOpacity=".602" d="M9 16.22l7.498 4.353v-7.701z"></path>
-                                                </g>
-                                            </g>
-                                        </svg>
-                                        <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 ml-8 mr-[2px]">Ethereum</div>
+                                        <img style={{ width: '24px', height: '24px' }} src={selectedToken.imgSrc} />
+
+                                        <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 ml-8 mr-[2px]">{selectedToken?.name}</div>
                                         <a className="typo-module_t-body-md-strong__B-Sd1 typo-module_mobile-t-body-md-strong__Kd9tc typo-module_neutral__9orA9 link-module_link__Nwimt undefined text-tc-text-dim" href="https://etherscan.io/tx/0x99abf00b109cbf90fc988267fe538dcc613462e1670947952f84a78e5a979b38" target="_blank" rel="noreferrer">
                                             <svg viewBox="0 0 20 20" width="16" height="16">
                                                 <path fill="currentColor" fillRule="evenodd" d="M12 3.25h4.003a.759.759 0 0 1 .528.22.748.748 0 0 1 .219.55V8a.75.75 0 0 1-1.5 0V5.81l-4.22 4.22a.75.75 0 0 1-1.06-1.06l4.22-4.22H12a.75.75 0 0 1 0-1.5Zm-6 1A1.75 1.75 0 0 0 4.25 6v8A1.75 1.75 0 0 0 6 15.75h8A1.75 1.75 0 0 0 15.75 14v-.833a.75.75 0 0 0-1.5 0V14a.25.25 0 0 1-.25.25H6a.25.25 0 0 1-.25-.25V6A.25.25 0 0 1 6 5.75h1.25a.75.75 0 0 0 0-1.5H6Z" clipRule="evenodd"></path>

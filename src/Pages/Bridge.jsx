@@ -16,7 +16,7 @@ const Bridge = () => {
   const tokens = [
     {
       symbol: "ETH",
-      name: "Ether",
+      name: "Ethereum",
       token_address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       imgSrc: "https://cdn.skymavis.com/explorer-cdn/contract/eth.png"
     },
@@ -328,20 +328,17 @@ const Bridge = () => {
                                 <button className="button-module_button__Z331g button-module_intent-default__f1RNz button-module_size-large__Nx98S button-module_button-root__0roWY flex justify-start rounded-[10px] px-12 py-8">
                                   <div className="flex items-center gap-12">
                                     <div className="relative">
-                                      <svg viewBox="0 0 32 32" width="28" height="28">
-                                        <g xmlns="http://www.w3.org/2000/svg" fill="none" fillRule="evenodd">
-                                          <circle cx="16" cy="16" r="16" fill="#627EEA"></circle>
-                                          <g fill="#FFF" fillRule="nonzero">
-                                            <path fillOpacity=".602" d="M16.498 4v8.87l7.497 3.35z"></path>
-                                            <path d="M16.498 4L9 16.22l7.498-3.35z"></path>
-                                            <path fillOpacity=".602" d="M16.498 21.968v6.027L24 17.616z"></path>
-                                            <path d="M16.498 27.995v-6.028L9 17.616z"></path>
-                                            <path fillOpacity=".2" d="M16.498 20.573l7.497-4.353-7.497-3.348z"></path>
-                                            <path fillOpacity=".602" d="M9 16.22l7.498 4.353v-7.701z"></path>
-                                          </g>
-                                        </g>
-                                      </svg>
-                                      <div className="absolute right-[-4px] bottom-[-4px] flex h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-[#000]">
+                                      <div className="image-wrapper-module_container__5gv1w image-wrapper-module_md__bnf-N mr-8">
+                                        <img
+                                          src={selectedToken ? selectedToken.imgSrc : "https://cdn.skymavis.com/explorer-cdn/contract/eth.png"}
+                                          width="100%"
+                                          height="100%"
+                                          alt="address-icon"
+                                        />
+                                      </div>
+                                      <div style={{
+                                        right: '2px'
+                                      }} className="absolute  bottom-[-4px] flex h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-[#000]">
                                         <div className="flex h-[16px] w-[16px] items-center justify-center rounded-[50%] bg-[#fff] p-[2px] text-[#000] [&>svg]:h-[14px] [&>svg]:w-[14px]">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 253 253">
                                             <g strokeLinecap="round" strokeLinejoin="round" clipPath="url(#walletgo_metamask)">
@@ -363,7 +360,7 @@ const Bridge = () => {
                                       </div>
                                     </div>
                                     <div className="inline-flex flex-col items-start">
-                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">Ethereum</div>
+                                      <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 typo-module_dim__qoQFh">{selectedToken.name}</div>
                                       <div className="typo-module_t-body-sm__UYoyX typo-module_mobile-t-body-sm__tBwWm typo-module_neutral__9orA9 truncate font-medium md:max-w-[125px]">
                                         {accounts.slice(0, 6) + '...' + accounts.slice(-4)}
                                       </div>
@@ -662,9 +659,9 @@ const Bridge = () => {
                 </button>
               </div>
             </div>
-          </main>
-        </div>
-      </div>
+          </main >
+        </div >
+      </div >
       {isModalOpen && (
         <BridgeModal
           setIsModalOpen={setIsModalOpen}
@@ -676,9 +673,9 @@ const Bridge = () => {
       }
 
       {
-        txState === 'Success' && <BridgeDepositModal setIsDepositModalOpen={setIsDepositModalOpen} />
+        txState === 'Success' && <BridgeDepositModal selectedToken={selectedToken} />
       }
-      {txState === 'Initalized' && <BridgeDepositAwaitModal setIsDepositAwaitOpen={setIsDepositAwaitOpen} />}
+      {txState === 'Initalized' && <BridgeDepositAwaitModal selectedToken={selectedToken} />}
       {isBridgeAssetPopupOpen && <BridgeAssetPopup setIsBridgeAssetPopupOpen={setIsBridgeAssetPopupOpen} setSelectedToken={setSelectedToken} />}
     </>
   );
